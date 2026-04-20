@@ -1,0 +1,49 @@
+name: Trigger auto deployment for app-bobrnegnowj2y
+
+# When this action will be executed
+on:
+  # Automatically trigger it when detected changes in repo
+  push:
+    branches: 
+      [ main ]
+    paths:
+    - '**'
+    - '.github/workflows/app-bobrnegnowj2y-AutoDeployTrigger-5166393b-64d8-4a95-bca8-0cd2dbb2ecb8.yml'
+
+  # Allow manual trigger 
+  workflow_dispatch:      
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions: 
+      id-token: write #This is required for requesting the OIDC JWT Token
+      contents: read #Required when GH token is used to authenticate with private repo
+
+    steps:
+      - name: Checkout to the branch
+        uses: actions/checkout@v2
+
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.APPBOBRNEGNOWJ2Y_AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.APPBOBRNEGNOWJ2Y_AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.APPBOBRNEGNOWJ2Y_AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and push container image to registry
+        uses: azure/container-apps-deploy-action@v2
+        with:
+          appSourcePath: ${{ github.workspace }}
+          _dockerfilePathKey_: _dockerfilePath_
+          _targetLabelKey_: _targetLabel_
+          registryUrl: bobrnegnowj2ycosureg.azurecr.io
+          registryUsername: ${{ secrets.APPBOBRNEGNOWJ2Y_REGISTRY_USERNAME }}
+          registryPassword: ${{ secrets.APPBOBRNEGNOWJ2Y_REGISTRY_PASSWORD }}
+          containerAppName: app-bobrnegnowj2y
+          resourceGroup: rg-techworkshop-l300-ai-agents
+          imageToBuild: bobrnegnowj2ycosureg.azurecr.io/app-bobrnegnowj2y:${{ github.sha }}
+          _buildArgumentsKey_: |
+            _buildArgumentsValues_
+
+
