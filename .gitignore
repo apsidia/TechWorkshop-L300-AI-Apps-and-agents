@@ -9,6 +9,7 @@ Thumbs.db
 .idea/
 *.sublime-workspace
 *.sublime-project
+.vscode/
 
 # Python
 __pycache__/
@@ -20,6 +21,7 @@ env/
 venv/
 ENV/
 .Python
+uv.lock
 
 # Node
 node_modules/
