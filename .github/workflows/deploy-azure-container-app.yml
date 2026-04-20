@@ -45,13 +45,20 @@ jobs:
           containerAppName: ${{ secrets.AZURE_CONTAINER_APP_NAME }}
           resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
           imageToDeploy: ${{ secrets.AZURE_REGISTRY_NAME }}/techworkshop:${{ github.sha }}
-          environmentVariables: |
-            FOUNDRY_ENDPOINT=${{ secrets.FOUNDRY_ENDPOINT }}
-            gpt_endpoint=${{ secrets.GPT_ENDPOINT }}
-            embedding_endpoint=${{ secrets.EMBEDDING_ENDPOINT }}
-            phi_4_endpoint=${{ secrets.PHI_4_ENDPOINT }}
-            storage_account_name=${{ secrets.STORAGE_ACCOUNT_NAME }}
-            COSMOS_ENDPOINT=${{ secrets.COSMOS_ENDPOINT }}
-            DATABASE_NAME=${{ secrets.DATABASE_NAME }}
-            CONTAINER_NAME=${{ secrets.CONTAINER_NAME }}
+
+
+      - name: Update Container App environment variables
+        run: |
+          az containerapp update \
+            --name ${{ secrets.AZURE_CONTAINER_APP_NAME }} \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --set-env-vars \
+            FOUNDRY_ENDPOINT=${{ secrets.FOUNDRY_ENDPOINT }} \
+            gpt_endpoint=${{ secrets.GPT_ENDPOINT }} \
+            embedding_endpoint=${{ secrets.EMBEDDING_ENDPOINT }} \
+            phi_4_endpoint=${{ secrets.PHI_4_ENDPOINT }} \
+            storage_account_name=${{ secrets.STORAGE_ACCOUNT_NAME }} \
+            COSMOS_ENDPOINT=${{ secrets.COSMOS_ENDPOINT }} \
+            DATABASE_NAME=${{ secrets.DATABASE_NAME }} \
+            CONTAINER_NAME=${{ secrets.CONTAINER_NAME }} \
             APPLICATIONINSIGHTS_CONNECTION_STRING=${{ secrets.APPLICATIONINSIGHTS_CONNECTION_STRING }}
