@@ -3,7 +3,7 @@ name: Deploy Cora Agent
 on:
   push:
     paths:
-      - 'src/prompts/shopperAgentPrompt.txt'
+      - 'src/prompts/ShopperAgentPrompt.txt'
       - 'src/infra/agents/cora.json'
       - '.github/workflows/cora_agent_update.yml'
   # Allows you to run this workflow manually from the Actions tab
@@ -29,7 +29,7 @@ jobs:
           # Read the prompt file and escape it for JSON
           INSTRUCTIONS=$(python3 -c "
           import json, sys
-          with open('src/prompts/shopperAgentPrompt.txt', 'r') as f:
+          with open('src/prompts/ShopperAgentPrompt.txt', 'r') as f:
               print(json.dumps(f.read()))
           ")
 
